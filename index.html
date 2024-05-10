@@ -44,9 +44,21 @@
 <body>
     <div class="container">
         <h1>Quiz de Segurança Online</h1>
-        <div id="quiz"></div> <!-- Área para carregar o conteúdo do quiz -->
-        <button onclick="submitQuiz()">Finalizar Quiz</button>
-        <div id="result"></div> <!-- Área para exibir o resultado do quiz -->
+        
+        <!-- Formulário para coletar nome e turma -->
+        <div id="startForm">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" required><br><br>
+            <label for="turma">Turma:</label>
+            <input type="text" id="turma" required><br><br>
+            <button onclick="startQuiz()">Iniciar Quiz</button>
+        </div>
+
+        <!-- Área do quiz -->
+        <div id="quiz" style="display: none;"></div>
+        
+        <!-- Resultado do quiz -->
+        <div id="result" style="display: none;"></div>
     </div>
 
     <script>
@@ -63,7 +75,7 @@
             },
             {
                 question: "O que é phishing?",
-                options: ["Um tipo de pescaria", "Uma técnica de engenharia social", "Uma tentativa de enganar usuários"],
+                options: ["Um tipo de pescaria", "Uma técnica de segurança", "Uma tentativa de enganar usuários"],
                 answer: "Uma tentativa de enganar usuários"
             },
             {
@@ -105,10 +117,28 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let playerName = "";
+        let playerTurma = "";
+
+        function startQuiz() {
+            playerName = document.getElementById("name").value;
+            playerTurma = document.getElementById("turma").value;
+
+            // Mostrar área do quiz e carregar primeira pergunta
+            document.getElementById("startForm").style.display = "none";
+            document.getElementById("quiz").style.display = "block";
+            loadQuestion();
+        }
 
         function loadQuestion() {
             const quizElement = document.getElementById("quiz");
             const questionData = questions[currentQuestion];
+
+            // Mostrar progresso das perguntas
+            quizElement.innerHTML = `
+                <p>${currentQuestion + 1}/${questions.length}</p>
+                <h2>${questionData.question}</h2>
+            `;
 
             let optionsHtml = '';
             questionData.options.forEach((option, index) => {
@@ -117,8 +147,7 @@
                 `;
             });
 
-            quizElement.innerHTML = `
-                <h2>${questionData.question}</h2>
+            quizElement.innerHTML += `
                 <div class="options">${optionsHtml}</div>
             `;
         }
@@ -143,9 +172,13 @@
 
             resultElement.innerHTML = `
                 <h2>Resultado do Quiz</h2>
-                <p>Você acertou ${score} de ${questions.length} perguntas (${percentage.toFixed(2)}%)</p>
+                <p>${playerName}, da turma ${playerTurma}, você acertou ${score} de ${questions.length} perguntas (${percentage.toFixed(2)}%)</p>
                 <p>${getFeedback(percentage)}</p>
             `;
+
+            // Exibir resultado e reiniciar quiz
+            document.getElementById("quiz").style.display = "none";
+            resultElement.style.display = "block";
         }
 
         function getFeedback(percentage) {
@@ -158,12 +191,17 @@
             }
         }
 
-        function submitQuiz() {
-            showResult();
+        // Reiniciar o quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            playerName = "";
+            playerTurma = "";
+            document.getElementById("result").style.display = "none";
+            document.getElementById("startForm").style.display = "block";
+            document.getElementById("name").value = "";
+            document.getElementById("turma").value = "";
         }
-
-        // Carregar a primeira pergunta ao carregar a página
-        window.onload = loadQuestion;
     </script>
 </body>
 </html>
