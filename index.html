@@ -1,83 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manu randola</title>
-
+    <title>Quiz de Segurança Online</title>
     <style>
         body {
-            background-color: red;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding-top: 20px;
         }
 
-        .painel {
-            margin: auto;
-            background-color: white;
-            width: 500px;
-            height: 500px;
-            border-radius: 20px;
-            text-align: center;
-            padding-top: 50px;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        #sim {
-            height: 40px;
-            width: 60px;
-            background-color: red;
-            border: 2px solid white;
-            border-radius: 10px;
-            color: white;
-            margin-left: -50px;
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
         }
-        #nao {
-            position: absolute;
-            height: 40px;
-            width: 60px;
-            background-color: red;
-            border: 2px solid white;
-            border-radius: 10px;
-            color: white;
-            margin-left: 10px;
+
+        button:hover {
+            background-color: #0056b3;
         }
     </style>
-
 </head>
 <body>
+    <div class="container">
+        <h1>Quiz de Segurança Online</h1>
+        <div id="quiz"></div> <!-- Área para carregar o conteúdo do quiz -->
+        <button onclick="submitQuiz()">Finalizar Quiz</button>
+        <div id="result"></div> <!-- Área para exibir o resultado do quiz -->
+    </div>
 
-<div class="painel">
-    <h1>Manuela Randola</h1>
+    <script>
+        const questions = [
+            {
+                question: "O que são senhas seguras?",
+                options: ["Senhas curtas e simples", "Senhas longas e complexas", "Senhas com nomes comuns"],
+                answer: "Senhas longas e complexas"
+            },
+            {
+                question: "O que é malware?",
+                options: ["Software seguro", "Programa malicioso", "Um tipo de hardware"],
+                answer: "Programa malicioso"
+            },
+            // Adicione mais perguntas aqui...
+        ];
 
-    <img src="https://media.discordapp.net/attachments/1072281056696344728/1214206203236978718/8ab6164c9c3cfabef6a13703d5848b9d.jpg?ex=663ecce5&is=663d7b65&hm=62fc2f09f15eaafd823d2712ea09519d5022f1f07b76cb4e45405ca8231cd56a&format=webp&" alt="">
+        let currentQuestion = 0;
+        let score = 0;
 
-    <h2>Real fã da Lilly?</h2>
+        function loadQuestion() {
+            const quizElement = document.getElementById("quiz");
+            const questionData = questions[currentQuestion];
 
-    <button id="sim" onclick="euSeiQueVcEhMeuFa()">Sim!</button>
-    <button onmouseover="fuja()" id="nao">Não!</button>
+            let optionsHtml = '';
+            questionData.options.forEach((option, index) => {
+                optionsHtml += `<button onclick="checkAnswer('${option}')">${option}</button>`;
+            });
 
-</div>
+            quizElement.innerHTML = `
+                <h2>${questionData.question}</h2>
+                ${optionsHtml}
+            `;
+        }
 
-<script>
-    function fuja() {
-        var botaoNao = document.getElementById("nao");
+        function checkAnswer(userAnswer) {
+            const questionData = questions[currentQuestion];
+            if (userAnswer === questionData.answer) {
+                score++;
+            }
 
-        var larguraJanela = window.innerWidth;
-        var alturaJanela = window.innerHeight;
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
 
-        var maxX = larguraJanela - botaoNao.offsetWidth;
-        var maxY = alturaJanela - botaoNao.offsetHeight;
+        function showResult() {
+            const resultElement = document.getElementById("result");
+            const percentage = (score / questions.length) * 100;
 
-        var aleatorioX = Math.floor(Math.random() * maxX);
-        var aleatorioY = Math.floor(Math.random() * maxY);
+            resultElement.innerHTML = `
+                <h2>Resultado do Quiz</h2>
+                <p>Você acertou ${score} de ${questions.length} perguntas (${percentage.toFixed(2)}%)</p>
+                <p>${getFeedback(percentage)}</p>
+            `;
+        }
 
-        botaoNao.style.left = aleatorioX + "px";
-        botaoNao.style.top = aleatorioY + "px";
-    }
+        function getFeedback(percentage) {
+            if (percentage < 50) {
+                return "Você precisa estudar mais sobre segurança online. Recomendamos revisar os conceitos básicos.";
+            } else if (percentage < 80) {
+                return "Você tem um bom conhecimento sobre segurança online, mas ainda há espaço para melhorias.";
+            } else {
+                return "Parabéns! Seu conhecimento sobre segurança online é sólido.";
+            }
+        }
 
-    function euSeiQueVcEhMeuFa() {
-        alert("Eu sei que você é meu fã! <3");
-    }
-</script>
+        function submitQuiz() {
+            showResult();
+        }
 
+        // Carregar a primeira pergunta ao carregar a página
+        window.onload = loadQuestion;
+    </script>
 </body>
 </html>
