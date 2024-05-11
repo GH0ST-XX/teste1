@@ -66,59 +66,23 @@
             {
                 question: "O que são senhas seguras?",
                 options: ["Senhas curtas e simples", "Senhas longas e complexas", "Senhas com nomes comuns"],
-                answer: "Senhas longas e complexas"
+                answer: "Senhas longas e complexas",
+                explanation: "Senhas seguras devem ser longas e incluir letras maiúsculas, minúsculas, números e símbolos."
             },
             {
                 question: "O que é malware?",
                 options: ["Software seguro", "Programa malicioso", "Um tipo de hardware"],
-                answer: "Programa malicioso"
+                answer: "Programa malicioso",
+                explanation: "Malware é um software destinado a danificar ou realizar operações indesejadas em um sistema."
             },
-            {
-                question: "O que é phishing?",
-                options: ["Um tipo de pescaria", "Uma técnica de segurança", "Uma tentativa de enganar usuários"],
-                answer: "Uma tentativa de enganar usuários"
-            },
-            {
-                question: "Qual é um método comum para criar uma senha segura?",
-                options: ["Usar uma única palavra simples", "Combinação de letras maiúsculas e minúsculas, números e símbolos", "Escrever a senha em um papel"],
-                answer: "Combinação de letras maiúsculas e minúsculas, números e símbolos"
-            },
-            {
-                question: "O que é um software antivírus?",
-                options: ["Um programa para criar vírus", "Um programa para remover vírus de um computador", "Um sistema operacional"],
-                answer: "Um programa para remover vírus de um computador"
-            },
-            {
-                question: "O que significa HTTPS?",
-                options: ["Protocolo de transferência de hipertexto seguro", "Protocolo de Transporte Altamente Eficaz para Segurança", "Sistema de Segurança de Transferência Hiper"],
-                answer: "Hypertext Transfer Protocol Secure"
-            },
-            {
-                question: "O que é autenticação de dois fatores?",
-                options: ["Um método para acessar duas contas diferentes", "Um processo que requer duas senhas", "Um método que adiciona uma camada extra de segurança ao solicitar duas formas de identificação"],
-                answer: "Um método que adiciona uma camada extra de segurança ao solicitar duas formas de identificação"
-            },
-            {
-                question: "Qual é uma maneira comum de proteger sua rede Wi-Fi doméstica?",
-                options: ["Manter a rede aberta e acessível a todos", "Usar uma senha forte e ocultar o nome da rede", "Não definir uma senha"],
-                answer: "Usar uma senha forte e ocultar o nome da rede"
-            },
-            {
-                question: "O que é engenharia social?",
-                options: ["Um ramo da engenharia de computação", "Um método para projetar sistemas de segurança", "Manipulação psicológica para obter informações confidenciais"],
-                answer: "Manipulação psicológica para obter informações confidenciais"
-            },
-            {
-                question: "Por que é importante manter o software atualizado?",
-                options: ["Para ocupar mais espaço no disco rígido", "Para corrigir falhas de segurança conhecidas e manter o software funcionando corretamente", "Para aumentar a velocidade da internet"],
-                answer: "Para corrigir falhas de segurança conhecidas e manter o software funcionando corretamente"
-            }
+            // Adicione mais perguntas aqui...
         ];
 
         let currentQuestion = 0;
         let score = 0;
         let playerName = "";
         let playerTurma = "";
+        let wrongAnswers = [];
 
         function startQuiz() {
             playerName = document.getElementById("name").value;
@@ -156,6 +120,12 @@
             const questionData = questions[currentQuestion];
             if (userAnswer === questionData.answer) {
                 score++;
+            } else {
+                wrongAnswers.push({
+                    question: questionData.question,
+                    correctAnswer: questionData.answer,
+                    explanation: questionData.explanation
+                });
             }
 
             currentQuestion++;
@@ -170,12 +140,26 @@
             const resultElement = document.getElementById("result");
             const percentage = (score / questions.length) * 100;
 
-            resultElement.innerHTML = `
+            let resultHtml = `
                 <h2>Resultado do Quiz</h2>
                 <p>${playerName}, da turma ${playerTurma}, você acertou ${score} de ${questions.length} perguntas (${percentage.toFixed(2)}%)</p>
                 <p>${getFeedback(percentage)}</p>
                 <button onclick="restartQuiz()">Reiniciar Quiz</button>
             `;
+
+            if (wrongAnswers.length > 0) {
+                resultHtml += `<h3>Perguntas respondidas incorretamente:</h3>`;
+                wrongAnswers.forEach((item) => {
+                    resultHtml += `
+                        <p><strong>Pergunta:</strong> ${item.question}</p>
+                        <p><strong>Resposta correta:</strong> ${item.correctAnswer}</p>
+                        <p><strong>Explicação:</strong> ${item.explanation}</p>
+                        <hr>
+                    `;
+                });
+            }
+
+            resultElement.innerHTML = resultHtml;
 
             // Exibir resultado e reiniciar quiz
             document.getElementById("quiz").style.display = "none";
@@ -198,6 +182,7 @@
             score = 0;
             playerName = "";
             playerTurma = "";
+            wrongAnswers = [];
             document.getElementById("result").style.display = "none";
             document.getElementById("startForm").style.display = "block";
             document.getElementById("name").value = "";
