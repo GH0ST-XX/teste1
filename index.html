@@ -75,7 +75,54 @@
                 answer: "Programa malicioso",
                 explanation: "Malware é um software destinado a danificar ou realizar operações indesejadas em um sistema."
             },
-            // Adicione mais perguntas aqui...
+            {
+                question: "O que é phishing?",
+                options: ["Um tipo de pescaria", "Uma técnica de segurança", "Uma tentativa de enganar usuários"],
+                answer: "Uma tentativa de enganar usuários",
+                explanation: "Phishing é uma tentativa de obter informações confidenciais através de engenharia social."
+            },
+            {
+                question: "Qual é um método comum para criar uma senha segura?",
+                options: ["Usar uma única palavra simples", "Combinação de letras maiúsculas e minúsculas, números e símbolos", "Escrever a senha em um papel"],
+                answer: "Combinação de letras maiúsculas e minúsculas, números e símbolos",
+                explanation: "Senhas seguras devem ser complexas, utilizando uma combinação de letras maiúsculas, minúsculas, números e símbolos."
+            },
+            {
+                question: "O que é um software antivírus?",
+                options: ["Um programa para criar vírus", "Um programa para remover vírus de um computador", "Um sistema operacional"],
+                answer: "Um programa para remover vírus de um computador",
+                explanation: "Um software antivírus é projetado para detectar e remover software malicioso de um computador."
+            },
+            {
+                question: "O que é phishing?",
+                options: ["Uma técnica para pescar", "Um método para detectar vírus", "Uma tentativa de enganar usuários para obter informações pessoais"],
+                answer: "Uma tentativa de enganar usuários para obter informações pessoais",
+                explanation: "Phishing é uma prática de engenharia social que visa enganar pessoas para obter informações confidenciais."
+            },
+            {
+                question: "O que significa HTTPS?",
+                options: ["Protocolo de transferência de hipertexto seguro", "Protocolo de Transporte Altamente Eficaz para Segurança", "Sistema de Segurança de Transferência Hiper"],
+                answer: "Protocolo de transferência de hipertexto seguro",
+                explanation: "HTTPS é uma versão segura do protocolo HTTP usado para comunicações na web."
+            },
+            {
+                question: "Qual é a prática recomendada ao receber emails suspeitos?",
+                options: ["Clicar em links desconhecidos", "Responder com informações pessoais", "Não abrir anexos nem clicar em links suspeitos"],
+                answer: "Não abrir anexos nem clicar em links suspeitos",
+                explanation: "Evite abrir anexos ou clicar em links em emails suspeitos para evitar ataques de phishing ou malware."
+            },
+            {
+                question: "O que é autenticação de dois fatores?",
+                options: ["Um método para acessar duas contas diferentes", "Um processo que requer duas senhas", "Um método que adiciona uma camada extra de segurança ao solicitar duas formas de identificação"],
+                answer: "Um método que adiciona uma camada extra de segurança ao solicitar duas formas de identificação",
+                explanation: "A autenticação de dois fatores requer duas formas de identificação para verificar a identidade do usuário."
+            },
+            {
+                question: "Qual é uma maneira comum de proteger sua rede Wi-Fi doméstica?",
+                options: ["Manter a rede aberta e acessível a todos", "Usar uma senha forte e ocultar o nome da rede", "Não definir uma senha"],
+                answer: "Usar uma senha forte e ocultar o nome da rede",
+                explanation: "Proteja sua rede Wi-Fi com uma senha forte e ocultando o nome da rede para evitar acesso não autorizado."
+            }
         ];
 
         let currentQuestion = 0;
@@ -144,21 +191,18 @@
                 <h2>Resultado do Quiz</h2>
                 <p>${playerName}, da turma ${playerTurma}, você acertou ${score} de ${questions.length} perguntas (${percentage.toFixed(2)}%)</p>
                 <p>${getFeedback(percentage)}</p>
-                <button onclick="restartQuiz()">Reiniciar Quiz</button>
+                <h3>Perguntas que você errou:</h3>
             `;
 
-            if (wrongAnswers.length > 0) {
-                resultHtml += `<h3>Perguntas respondidas incorretamente:</h3>`;
-                wrongAnswers.forEach((item) => {
-                    resultHtml += `
-                        <p><strong>Pergunta:</strong> ${item.question}</p>
-                        <p><strong>Resposta correta:</strong> ${item.correctAnswer}</p>
-                        <p><strong>Explicação:</strong> ${item.explanation}</p>
-                        <hr>
-                    `;
-                });
-            }
+            wrongAnswers.forEach((wrongAnswer, index) => {
+                resultHtml += `
+                    <p><strong>${index + 1}. ${wrongAnswer.question}</strong></p>
+                    <p>Sua resposta: ${wrongAnswer.correctAnswer}</p>
+                    <p>Explicação: ${wrongAnswer.explanation}</p>
+                `;
+            });
 
+            resultHtml += `<button onclick="restartQuiz()">Reiniciar Quiz</button>`;
             resultElement.innerHTML = resultHtml;
 
             // Exibir resultado e reiniciar quiz
