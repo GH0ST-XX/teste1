@@ -39,6 +39,15 @@
         .option {
             margin-bottom: 10px;
         }
+
+        #result {
+            text-align: left;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +103,7 @@
                 explanation: "Um software antivírus é projetado para detectar e remover software malicioso de um computador."
             },
             {
-                 question: "O que é engenharia social?",
+                question: "O que é engenharia social?",
                 options: ["Um ramo da engenharia de computação", "Um método para projetar sistemas de segurança", "Manipulação psicológica para obter informações confidenciais"],
                 answer: "Manipulação psicológica para obter informações confidenciais",
                 explanation: "Engenharia social é o uso da manipulação psicológica para obter informações confidenciais ou acesso não autorizado a sistemas."
@@ -134,6 +143,12 @@
         function startQuiz() {
             playerName = document.getElementById("name").value;
             playerTurma = document.getElementById("turma").value;
+
+            // Verificar se nome e turma foram preenchidos
+            if (!playerName || !playerTurma) {
+                alert("Por favor, preencha o nome e a turma.");
+                return;
+            }
 
             // Mostrar área do quiz e carregar primeira pergunta
             document.getElementById("startForm").style.display = "none";
@@ -197,8 +212,9 @@
             wrongAnswers.forEach((wrongAnswer, index) => {
                 resultHtml += `
                     <p><strong>${index + 1}. ${wrongAnswer.question}</strong></p>
-                    <p>Sua resposta: ${wrongAnswer.correctAnswer}</p>
-                    <p>Explicação: ${wrongAnswer.explanation}</p>
+                    <p><em>Sua resposta:</em> ${wrongAnswer.correctAnswer}</p>
+                    <p><em>Explicação:</em> ${wrongAnswer.explanation}</p>
+                    <hr>
                 `;
             });
 
